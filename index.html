@@ -39,25 +39,19 @@
 | |_| | | | |_| |  | |__ |
 |_____|_| |_____|(_)_|___|`;
 
-    const rng1 = new Uint8Array(ascii.length);
-    const rng2 = new Uint8Array(ascii.length);
-    const rng3 = new Uint8Array(ascii.length);
-    const rng4 = new Uint8Array(ascii.length);
-    crypto.getRandomValues(rng1);
-    crypto.getRandomValues(rng2);
-    crypto.getRandomValues(rng3);
-    crypto.getRandomValues(rng4);
+    // 4 random numbers are required for each character
+    const rng = [...crypto.getRandomValues(new Uint8Array(ascii.length * 4))];
 
-    for (const [index, finalChar] of [...ascii].entries()) {
+    for (const finalChar of ascii) {
       if (finalChar === '\n') {
         asciiContainer.insertAdjacentHTML('beforeend', '<br>');
         continue;
       }
 
-      const startOffset = rng1[index]; // Initial delay before starting the cycle (implied max = 255ms)
-      const jump = rng2[index] % cycle.length; // How many cycle symbols to skip per tick
-      let cycleIndex = rng3[index] % cycle.length; // Which character to begin with in the cycle
-      let ticksRemaining = rng4[index] % maxTicks; // Number of ticks before settling
+      const startOffset = rng.pop(); // Initial delay before starting the cycle (implied max = 255ms)
+      const jump = rng.pop() % cycle.length; // How many cycle symbols to skip per tick
+      let cycleIndex = rng.pop() % cycle.length; // Which character to begin with in the cycle
+      let ticksRemaining = rng.pop() % maxTicks; // Number of ticks before settling
 
       const charElem = document.createElement('span');
       asciiContainer.insertAdjacentElement('beforeend', charElem);
