@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:,">
+  <title>ard.is</title>
+  <style>
+    body {
+      block-size: 100dvb;
+      margin: 0;
+      background: hsl(216deg 50% 95%);
+      color: hsl(216deg 50% 10%);
+      display: grid;
+      place-items: center;
+    }
+
+    #ascii-container {
+      font-size: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <pre role="img" aria-label="Minimalist ASCII art showing the text 'ard.is'." id="ascii-container"></pre>
+
+  <script type="module">
+    const asciiContainer = document.getElementById('ascii-container');
+
+    const timePerTick = 200; // In ms
+    const maxTicks = 25; // 25 ticks * 200 ms = maximum 5000ms total cycle time
+    const cycle = '<>?/|\\[]{}()-_~`'; // Characters to cycle through randomly before settling
+    const ascii =
+`               _          
+              | |  (_)    
+  ____ ____ __| |   _ ___ 
+ / _  |  __/ _  |  | | __|
+| |_| | | | |_| |  | |__ |
+|_____|_| |_____|(_)_|___|`;
+
+    const rng1 = new Uint8Array(ascii.length);
+    const rng2 = new Uint8Array(ascii.length);
+    const rng3 = new Uint8Array(ascii.length);
+    const rng4 = new Uint8Array(ascii.length);
+    crypto.getRandomValues(rng1);
+    crypto.getRandomValues(rng2);
+    crypto.getRandomValues(rng3);
+    crypto.getRandomValues(rng4);
+
+    for (const [index, finalChar] of [...ascii].entries()) {
+      if (finalChar === '\n') {
+        asciiContainer.insertAdjacentHTML('beforeend', '<br>');
+        continue;
+      }
+
+      const startOffset = rng1[index]; // Initial delay before starting the cycle (implied max = 255ms)
+      const jump = rng2[index] % cycle.length; // How many cycle symbols to skip per tick
+      let cycleIndex = rng3[index] % cycle.length; // Which character to begin with in the cycle
+      let ticksRemaining = rng4[index] % maxTicks; // Number of ticks before settling
+
+      const charElem = document.createElement('span');
+      asciiContainer.insertAdjacentElement('beforeend', charElem);
+
+      function tick() {
+        if (ticksRemaining === 0) {
+          charElem.textContent = finalChar;
+          return;
+        }
+        charElem.textContent = cycle[cycleIndex];
+        cycleIndex = (cycleIndex + jump) % cycle.length;
+        ticksRemaining--;
+        setTimeout(tick, timePerTick);
+      };
+      setTimeout(tick, startOffset);
+    }
+  </script>
+</body>
+
+</html>
