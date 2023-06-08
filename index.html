@@ -68,6 +68,9 @@
       };
       setTimeout(tick, startOffset);
     }
+
+    // Flatten all inner text nodes into one text node in the outer container
+    setTimeout(() => asciiContainer.textContent = asciiContainer.innerText, timePerTick * (maxTicks + 1));
   </script>
 </body>
 
