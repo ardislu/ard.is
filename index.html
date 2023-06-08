@@ -58,7 +58,7 @@
 
       function tick() {
         if (ticksRemaining === 0) {
-          charElem.textContent = finalChar;
+          charElem.replaceWith(finalChar);
           return;
         }
         charElem.textContent = cycle[cycleIndex];
