@@ -29,9 +29,9 @@
   <script type="module">
     const asciiContainer = document.getElementById('ascii-container');
 
-    const timePerTick = 200; // In ms
-    const maxTicks = 25; // 25 ticks * 200 ms = maximum 5000ms total cycle time
-    const cycle = '<>?/|\\[]{}()-_~`'; // Characters to cycle through randomly before settling
+    const msPerFrame = 50; // 1000ms / 20fps = 50
+    const totalFrames = 100; // 50 * 100 = 5s animation duration
+    const cycle = '<>?\\[]{}-~`*+=.!@#$%^&'; // Characters to cycle through randomly before settling
     const ascii =
 `               _          
               | |  (_)    
@@ -40,38 +40,41 @@
 | |_| | | | |_| |  | |__ |
 |_____|_| |_____|(_)_|___|`;
 
-    // 4 random numbers are required for each character
-    const rng = [...crypto.getRandomValues(new Uint8Array(ascii.length * 4))];
-
-    for (const finalChar of ascii) {
-      if (finalChar === '\n') {
-        asciiContainer.insertAdjacentHTML('beforeend', '<br>');
-        continue;
-      }
-
-      const startOffset = rng.pop(); // Initial delay before starting the cycle (implied max = 255ms)
-      const jump = rng.pop() % cycle.length; // How many cycle symbols to skip per tick
-      let cycleIndex = rng.pop() % cycle.length; // Which character to begin with in the cycle
-      let ticksRemaining = rng.pop() % maxTicks; // Number of ticks before settling
-
-      const charElem = document.createElement('span');
-      asciiContainer.insertAdjacentElement('beforeend', charElem);
-
-      function tick() {
-        if (ticksRemaining === 0) {
-          charElem.replaceWith(finalChar);
-          return;
+    // Pre-generate all frames for the animation 
+    const rng = [...crypto.getRandomValues(new Uint8Array(ascii.length * totalFrames))];
+    const frames = [ascii.replaceAll(/[^\n]/g, () => cycle[rng.pop() % cycle.length])]; // Initialize first frame with random symbols
+    for (let i = 1; i < totalFrames - 1; i++) { // First and last frames are hardcoded
+      let frame = '';
+      for (const [j, finalChar] of [...ascii].entries()) {
+        const rand = rng.pop();
+        if (frames[i - 1][j] === finalChar || rand < 13) { // Character is already settled, or 5% chance of settling (13/256)
+          frame += finalChar;
         }
-        charElem.textContent = cycle[cycleIndex];
-        cycleIndex = (cycleIndex + jump) % cycle.length;
-        ticksRemaining--;
-        setTimeout(tick, timePerTick);
-      };
-      setTimeout(tick, startOffset);
+        else if (rand < 64) { // 20% chance of switching: (64 - 13)/256
+          frame += cycle[rand % cycle.length];
+        }
+        else { // 75% chance of staying the same as last frame
+          frame += frames[i - 1][j];
+        }
+      }
+      frames.push(frame);
     }
+    frames.push(ascii); // Final frame
 
-    // Flatten all inner text nodes into one text node in the outer container
-    setTimeout(() => asciiContainer.textContent = asciiContainer.innerText, timePerTick * (maxTicks + 1));
+    // Start animation
+    let start;
+    function step(timestamp) {
+      if (start === undefined) {
+        start = timestamp;
+      }
+      const currentFrame = Math.floor((timestamp - start) / msPerFrame);
+      if (currentFrame >= frames.length) {
+        return;
+      }
+      asciiContainer.textContent = frames[currentFrame];
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   </script>
 </body>
 
