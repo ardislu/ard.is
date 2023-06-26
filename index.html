@@ -9,6 +9,7 @@
   <title>ard.is</title>
   <style>
     body {
+      font-family: sans-serif;
       block-size: 100dvb;
       margin: 0;
       background: radial-gradient(circle at 50%, hsl(216deg 50% 95%) 0, hsl(216deg 50% 90%) min(300px, 10dvb), hsl(216deg 50% 90%));
@@ -17,19 +18,58 @@
       place-items: center;
     }
 
+    main {
+      inline-size: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      display: flex;
+    }
+
+    li:not(:last-child)::after {
+      content: '•';
+      padding: 8px;
+    }
+
+    a {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: hsl(216deg 50% 50%);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+
     #ascii-container {
+      font-family: monospace;
       font-size: clamp(1rem, 2.5dvi, 2rem);
     }
   </style>
 </head>
 
 <body>
-  <pre role="img" aria-label="Minimalist ASCII art showing the text 'ard.is'." id="ascii-container"><noscript>               _
+  <main>
+    <pre role="img" aria-label="Minimalist ASCII art showing the text 'ard.is'." id="ascii-container"><noscript>               _
               | |  (_)
   ____ ____ __| |   _ ___
  / _  |  __/ _  |  | | __|
 | |_| | | | |_| |  | |__ |
 |_____|_| |_____|(_)_|___|</noscript></pre>
+    <ul>
+      <li><a href="https://github.com/ardislu">GitHub</a></li>
+      <li><a href="https://ardislu.dev">Blog</a></li>
+      <li><a href="https://ardis.lu">Projects</a></li>
+    </ul>
+  </main>
 
   <script type="module">
     const asciiContainer = document.getElementById('ascii-container');
