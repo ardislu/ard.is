@@ -114,6 +114,7 @@
       }
       const currentFrame = Math.floor((timestamp - start) / msPerFrame);
       if (currentFrame >= frames.length) {
+        asciiContainer.textContent = ascii;
         return;
       }
       asciiContainer.textContent = frames[currentFrame];
