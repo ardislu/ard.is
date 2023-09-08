@@ -23,6 +23,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 8px;
     }
 
     ul {
@@ -69,6 +70,7 @@
       <li><a href="https://ardislu.dev">Blog</a></li>
       <li><a href="https://ardis.lu">Projects</a></li>
     </ul>
+    <address><a href="#"><noscript>ardis [at] ardislu [dot] dev</noscript></a></address>
   </main>
 
   <script type="module">
@@ -121,6 +123,11 @@
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+
+    // Inject obfuscated email. To block low-effort scraping.
+    const addr = document.querySelector('address > a');
+    addr.href = atob('bWFpbHRvOmFyZGlzQGFyZGlzbHUuZGV2');
+    addr.textContent = atob('YXJkaXNAYXJkaXNsdS5kZXY=');
   </script>
 </body>
 
