@@ -122,7 +122,12 @@
       asciiContainer.textContent = frames[currentFrame];
       requestAnimationFrame(step);
     }
-    requestAnimationFrame(step);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      asciiContainer.textContent = ascii;
+    }
+    else {
+      requestAnimationFrame(step);
+    }
 
     // Inject obfuscated email. To block low-effort scraping.
     const addr = document.querySelector('address > a');
