@@ -53,6 +53,30 @@
     #ascii-container {
       font-family: monospace;
       font-size: clamp(1rem, 2.5dvi, 2rem);
+      position: relative;
+    }
+
+    #ascii-container button {
+      font-family: inherit;
+      font-size: inherit;
+      position: absolute;
+      left: 17.5ch;
+      bottom: 0;
+      inline-size: 2ch;
+      block-size: 2ch;
+      border: none;
+      border-radius: 2ch;
+      padding: 0;
+      line-height: 0;
+      background: none;
+      transition: background-color 400ms;
+    }
+
+    #ascii-container button:hover,
+    #ascii-container button:focus {
+      cursor: pointer;
+      background: hsl(216deg 90% 80% / 0.5);
+      transition: background-color 200ms;
     }
   </style>
 </head>
@@ -128,6 +152,16 @@
     else {
       requestAnimationFrame(step);
     }
+
+    // Add hidden effect
+    const button = document.createElement('button');
+    button.addEventListener('click', e => {
+      // Placeholder until I can implement something cooler
+      e.target.textContent = '!';
+    });
+    setTimeout(() => {
+      asciiContainer.insertAdjacentElement('beforeend', button);
+    }, msPerFrame * totalFrames + 500);
 
     // Inject obfuscated email. To block low-effort scraping.
     const addr = document.querySelector('address > a');
