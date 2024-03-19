@@ -143,6 +143,7 @@
       const currentFrame = Math.floor((timestamp - start) / msPerFrame);
       if (currentFrame >= frames.length) {
         asciiContainer.textContent = ascii;
+        asciiContainer.insertAdjacentElement('beforeend', button)
         return;
       }
       asciiContainer.textContent = frames[currentFrame];
@@ -178,9 +179,6 @@
         });
       }
     });
-    setTimeout(() => {
-      asciiContainer.insertAdjacentElement('beforeend', button);
-    }, msPerFrame * totalFrames + 500);
 
     // Inject obfuscated email. To block low-effort scraping.
     const addr = document.querySelector('address > a');
