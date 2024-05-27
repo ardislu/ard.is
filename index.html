@@ -192,7 +192,7 @@
         highlightStyle.textContent = '';
         highlights.forEach((highlight, i) => {
           CSS.highlights.set(`c${i}`, new Highlight(...highlight));
-          highlightStyle.textContent += `::highlight(c${i}){color:hsl(${i * 36}deg 50% 50%)}`;
+          highlightStyle.textContent += `pre::highlight(c${i}){color:hsl(${i * 36}deg 50% 50%)}`;
         });
       }
     });
