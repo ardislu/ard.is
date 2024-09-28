@@ -90,7 +90,7 @@
         bottom: 0;
       }
 
-      &.character {
+      &.translate {
         left: 19.5ch;
         top: 2.3ch;
       }
@@ -210,7 +210,7 @@
 
     // Add hidden effect 2
     const translateEffect = document.createElement('button');
-    translateEffect.classList.add('effect', 'character');
+    translateEffect.classList.add('effect', 'translate');
     translateEffect.addEventListener('click', e => {
       e.target.textContent = '!';
 
