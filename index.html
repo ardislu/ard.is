@@ -82,7 +82,7 @@
         inline-size: 100%;
         block-size: 100%;
         border-radius: 2ch;
-        animation: flicker 1s linear infinite alternate;
+        animation: flicker 1s linear var(--delay) infinite alternate;
       }
 
       &.color {
@@ -186,6 +186,7 @@
     // Add hidden effect
     const colorEffect = document.createElement('button');
     colorEffect.classList.add('effect', 'color');
+    colorEffect.style.setProperty('--delay', `${Math.floor(Math.random() * 5000)}ms`);
     const highlightStyle = document.createElement('style');
     document.head.appendChild(highlightStyle);
     colorEffect.addEventListener('click', e => {
@@ -211,6 +212,7 @@
     // Add hidden effect 2
     const translateEffect = document.createElement('button');
     translateEffect.classList.add('effect', 'translate');
+    translateEffect.style.setProperty('--delay', `${Math.floor(Math.random() * 5000)}ms`);
     translateEffect.addEventListener('click', e => {
       e.target.textContent = '!';
 
