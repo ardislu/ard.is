@@ -54,10 +54,14 @@
     }
 
     #ascii-container {
+      --xOffset: 0;
+      --yOffset: 0;
       font-family: monospace;
       font-size: clamp(1rem, 2.5dvi, 2rem);
       position: relative;
       transition: translate 200ms, filter 200ms;
+      translate: var(--xOffset) var(--yOffset);
+      filter: drop-shadow(calc(var(--xOffset) * -1) calc(var(--yOffset) * -1) 4px hsl(216deg 50% 50%));
     }
 
     #ascii-container .effect {
@@ -222,8 +226,8 @@
 
       const xOffset = Math.floor(Math.random() * 5 + 5) * (Math.random() < 0.5 ? 1 : -1);
       const yOffset = Math.floor(Math.random() * 5 + 5) * (Math.random() < 0.5 ? 1 : -1);
-      asciiContainer.style.setProperty('translate', `${xOffset}px ${yOffset}px`);
-      asciiContainer.style.setProperty('filter', `drop-shadow(${xOffset * -1}px ${yOffset * -1}px 4px hsl(216deg 50% 50%))`);
+      asciiContainer.style.setProperty('--xOffset', `${xOffset}px`);
+      asciiContainer.style.setProperty('--yOffset', `${yOffset}px`);
     });
 
     // Inject obfuscated email. To block low-effort scraping.
