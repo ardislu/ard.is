@@ -8,12 +8,17 @@
   <link rel="icon" href="data:,">
   <title>ard.is</title>
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     body {
       font-family: sans-serif;
       block-size: 100dvb;
       margin: 0;
-      background: radial-gradient(circle at 50%, hsl(216deg 50% 95%) 0, hsl(216deg 50% 90%) min(300px, 10dvb), hsl(216deg 50% 90%));
-      color: hsl(216deg 50% 10%);
+      background: light-dark(radial-gradient(circle at 50%, hsl(216deg 50% 95%) 0, hsl(216deg 50% 90%) min(300px, 10dvb), hsl(216deg 50% 90%)),
+          radial-gradient(circle at 50%, hsl(216deg 60% 30%) 0, hsl(216deg 60% 25%) min(300px, 10dvb), hsl(216deg 60% 25%)));
+      color: light-dark(hsl(216deg 50% 10%), hsl(216deg 50% 90%));
       display: grid;
       place-items: center;
     }
@@ -42,7 +47,7 @@
     a {
       font-size: 1.25rem;
       font-weight: 700;
-      color: hsl(216deg 50% 50%);
+      color: light-dark(hsl(216deg 100% 30%), hsl(216deg 100% 85%));
       text-decoration: none;
       text-decoration-thickness: 0.15em;
       text-underline-offset: 0.15em;
