@@ -59,13 +59,15 @@
     }
 
     #ascii-container {
+      --skew: 0deg;
       --xOffset: 1px;
       --yOffset: 1px;
       --color: 216deg;
       font-family: monospace;
       font-size: clamp(1rem, 2.5dvi, 2rem);
       position: relative;
-      transition: translate 200ms, filter 200ms;
+      transition: transform 200ms, translate 200ms, filter 200ms;
+      transform: skew(0deg, var(--skew));
       translate: var(--xOffset) var(--yOffset);
       filter: drop-shadow(calc(var(--xOffset) * -1) calc(var(--yOffset) * -1) 4px hsl(var(--color) 50% 50%));
     }
@@ -97,6 +99,11 @@
 
       &.background {
         left: 2.5ch;
+        bottom: 2.4ch;
+      }
+
+      &.skew {
+        left: 12.5ch;
         bottom: 2.4ch;
       }
 
@@ -189,6 +196,7 @@
       if (currentFrame >= frames.length) {
         asciiContainer.textContent = ascii;
         asciiContainer.insertAdjacentElement('beforeend', backgroundEffect);
+        asciiContainer.insertAdjacentElement('beforeend', skewEffect);
         asciiContainer.insertAdjacentElement('beforeend', colorEffect);
         asciiContainer.insertAdjacentElement('beforeend', translateEffect);
         return;
@@ -213,6 +221,15 @@
     });
 
     // Add hidden effect 2
+    const skewEffect = document.createElement('button');
+    skewEffect.classList.add('effect', 'skew');
+    skewEffect.style.setProperty('--delay', `${Math.floor(Math.random() * 5000)}ms`);
+    skewEffect.addEventListener('click', e => {
+      e.target.textContent = '!';
+      asciiContainer.style.setProperty('--skew', `${(Math.random() * 8 + 1) * (Math.random() < 0.5 ? 1 : -1)}deg`);
+    });
+
+    // Add hidden effect 3
     const colorEffect = document.createElement('button');
     colorEffect.classList.add('effect', 'color');
     colorEffect.style.setProperty('--delay', `${Math.floor(Math.random() * 5000)}ms`);
@@ -238,7 +255,7 @@
       }
     });
 
-    // Add hidden effect 3
+    // Add hidden effect 4
     const translateEffect = document.createElement('button');
     translateEffect.classList.add('effect', 'translate');
     translateEffect.style.setProperty('--delay', `${Math.floor(Math.random() * 5000)}ms`);
