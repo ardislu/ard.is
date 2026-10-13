@@ -9,7 +9,15 @@
   <title>ard.is</title>
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    :root:has(#theme-toggle:checked) {
+      color-scheme: dark;
     }
 
     body {
@@ -134,6 +142,43 @@
       background: hsl(216deg 90% 80% / 0.5);
       transition: background-color 200ms;
     }
+
+    #theme-toggle {
+      appearance: none;
+      width: 40px;
+      height: 22px;
+      border-radius: 22px;
+      background: hsl(216deg 10% 55%);
+      cursor: pointer;
+      position: relative;
+      transition: background-color 200ms, filter 400ms;
+    }
+
+    #theme-toggle:hover,
+    #theme-toggle:focus {
+      transition: filter 200ms;
+      filter: brightness(1.2);
+    }
+
+    #theme-toggle::before {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      background: hsl(216deg 50% 90%);
+      transition: transform 200ms;
+    }
+
+    #theme-toggle:checked {
+      background: hsl(216deg 90% 45%);
+    }
+
+    #theme-toggle:checked::before {
+      transform: translateX(18px);
+    }
   </style>
 </head>
 
@@ -155,6 +200,7 @@
       <li><a href="https://git.ardis.lu">git.ardis.lu</a></li>
     </ul>
     <address><a href="#"><noscript>ardis [at] ardislu [dot] dev</noscript></a></address>
+    <input id="theme-toggle" type="checkbox" role="switch" aria-label="Toggle theme">
   </main>
 
   <script type="module">
@@ -272,6 +318,22 @@
     const addr = document.querySelector('address > a');
     addr.href = atob('bWFpbHRvOmFyZGlzQGFyZGlzbHUuZGV2');
     addr.textContent = atob('YXJkaXNAYXJkaXNsdS5kZXY=');
+
+    // Implement theme picker
+    function applyTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      if ((savedTheme === 'dark' && prefersDark) || (savedTheme === 'light' && !prefersDark)) { localStorage.removeItem('theme'); }
+      document.documentElement.dataset.theme = savedTheme ?? (prefersDark ? 'dark' : 'light');
+    }
+    applyTheme();
+    const toggle = document.querySelector('#theme-toggle');
+    toggle.checked = document.documentElement.dataset.theme === 'dark';
+    toggle.addEventListener('change', () => {
+      if (localStorage.getItem('theme') !== null) { localStorage.removeItem('theme'); }
+      else { localStorage.setItem('theme', matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'); }
+      applyTheme();
+    });
   </script>
 </body>
 
